@@ -55,18 +55,27 @@ function init() {
 		roughness: 0.7,
 		metalness: 0.0
 	} );
-	var cube = new THREE.Mesh( geometry, material );
+	var hiddenMaterial = new THREE.MeshStandardMaterial( {
+		color: Math.random() * 0xffffff,
+		roughness: 0.7,
+		metalness: 0.0
+	} );
+	var cube = new THREE.Mesh( geometry, hiddenMaterial );
 	cube.name = "cube";
 	cube.position.z = -5;
 	cube.position.y = 0;
 	cube.position.x = 0;
-	var wireframe = new THREE.WireframeGeometry(geometry);
+	cube.scale.x = 10;
+	cube.scale.y = 10;
+	cube.scale.z = 10;
+	/*var wireframe = new THREE.WireframeGeometry(geometry);
 	var line = new THREE.LineSegments( wireframe );
 	line.material.depthTest = false;
 	line.material.opacity = 0.25;
 	line.material.transparent = true;
 
-	group.add( line );
+	scene.add( line );*/
+	cube.material.wireframe = true;
 	group.add(cube);
 	var cube1 = new THREE.Mesh( geometry, material );
 	cube1.position.z = 1;
@@ -114,13 +123,13 @@ function init() {
 		object.position.y = 0;
 		scene.add(object);*/
 		object.name = "Face";
-		object.scale.x = 10;
-		object.scale.y = 10;
-		object.scale.z = 10;
-
-		object.position.z = -3;
+		object.scale.x = 0.5;
+		object.scale.y = 0.5;
+		object.scale.z = 0.5;
+		object.position.y = -0.15;
+		/*object.position.z = -3;
 		object.position.y = -0.1;
-		object.position.x = 0;
+		object.position.x = 0;*/
 		//object.bbox = new THREE.Box3().setFromObject(object);
 		//testing.vertices.push(object.vertices);
 		//testing.faces.push(object.faces);
