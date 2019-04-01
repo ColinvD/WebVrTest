@@ -50,48 +50,35 @@ function init() {
 	scene.add( group );
 
 	var geometry = new THREE.BoxBufferGeometry( 0.2, 0.2, 0.2 );
-	var material = new THREE.MeshStandardMaterial( {
-		color: Math.random() * 0xffffff,
-		roughness: 0.7,
-		metalness: 0.0
-	} );
 	var hiddenMaterial = new THREE.MeshStandardMaterial( {
 		color: Math.random() * 0xffffff,
 		roughness: 0.7,
-		metalness: 0.0
+		metalness: 0.0,
+		wireframe: true,
+		opacity: 0,
+		transparent: true
 	} );
 	var cube = new THREE.Mesh( geometry, hiddenMaterial );
 	cube.name = "cube";
-	cube.position.z = -5;
-	cube.position.y = 0;
 	cube.position.x = 0;
+	cube.position.y = 0;
+	cube.position.z = -5;
 	cube.scale.x = 10;
 	cube.scale.y = 10;
 	cube.scale.z = 10;
-	/*var wireframe = new THREE.WireframeGeometry(geometry);
-	var line = new THREE.LineSegments( wireframe );
-	line.material.depthTest = false;
-	line.material.opacity = 0.25;
-	line.material.transparent = true;
-
-	scene.add( line );*/
-	cube.material.wireframe = true;
 	group.add(cube);
-	var cube1 = new THREE.Mesh( geometry, material );
-	cube1.position.z = 1;
-	cube1.position.y = 0;
-	cube1.position.x = -1;
-	group.add(cube1);
-	var cube2 = new THREE.Mesh( geometry, material );
-	cube2.position.z = 0;
-	cube2.position.y = 0;
-	cube2.position.x = 1;
-	group.add(cube2);
-	var cube3 = new THREE.Mesh( geometry, material );
-	cube3.position.z = 0;
-	cube3.position.y = 1;
-	cube3.position.x = 0;
-	group.add(cube3);
+	for (var i = 0; i < 3; i++) {
+		var material = new THREE.MeshStandardMaterial( {
+			color: Math.random() * 0xffffff,
+			roughness: 0.7,
+			metalness: 0.0
+		} );
+		var aCube = new THREE.Mesh( geometry, material );
+		aCube.position.z = 0;
+		aCube.position.y = i;
+		aCube.position.x = 0;
+		group.add(aCube);
+	}
 
 	loader = new THREE.OBJLoader();
 	textureLoader = new THREE.TextureLoader();
@@ -115,34 +102,16 @@ function init() {
 			}
 		} );
 
-		/*object.scale.x = 20;
-		object.scale.y = 20;
-		object.scale.z = 20;
-
-		object.position.z = 0;
-		object.position.y = 0;
-		scene.add(object);*/
 		object.name = "Face";
 		object.scale.x = 0.5;
 		object.scale.y = 0.5;
 		object.scale.z = 0.5;
 		object.position.y = -0.15;
-		/*object.position.z = -3;
-		object.position.y = -0.1;
-		object.position.x = 0;*/
-		//object.bbox = new THREE.Box3().setFromObject(object);
-		//testing.vertices.push(object.vertices);
-		//testing.faces.push(object.faces);
 		group.add(object);
 		object.parent = cube;
-		//var secondHead = new THREE.Mesh(testing, faceMaterial);
-		//scene.add(secondHead);
 	});
-//}
 
-//group.children[0].children.add(group.children[1]);
-
-console.log(group);
+	console.log(group);
 
 	renderer = new THREE.WebGLRenderer( { antialias: true } );
 	renderer.setPixelRatio( window.devicePixelRatio );
@@ -160,17 +129,7 @@ console.log(group);
 	window.addEventListener( 'resize', onWindowResize, false );
 }
 
-/*function rotate(name){
-	var _name = name;
-	var _object = scene.getObjectByName(_name);
-	console.log(_object);
-	_object.rotation.x += 0.1;
-	_object.rotation.y += 0.1;
-	_object.rotation.z += 0.1;
-}*/
-
 function animate() {
-	//rotate("Face");
 	renderer.setAnimationLoop( render );
 }
 
@@ -191,7 +150,17 @@ function addControllers(){
 	controller2.addEventListener( 'selectstart', onSelectStart );
 	controller2.addEventListener( 'selectend', onSelectEnd );
 	scene.add( controller2 );
+	addControllerHands();
   addControllerLines();
+}
+
+function addControllerHands(){
+	var geo = new THREE.CylinderBufferGeometry();
+	var mat = new THREE.MeshBasicMaterial();
+	var hand = new THREE.Mesh(geo,mat);
+	hand.name = 'hand';
+	controller1.add(hand.clone());
+	controller2.add(hand.clone());
 }
 
 function addControllerLines(){
